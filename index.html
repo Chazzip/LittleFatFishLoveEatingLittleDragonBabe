@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1017" />
+    <meta
+      name="description"
+      content="羽拍全池抽选终端：所有球拍同权随机抽取，带稀有度揭晓与抽取记录。"
+    />
+    <title>羽刃补给终端</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="field" aria-hidden="true"></canvas>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup" aria-label="羽刃补给终端">
+          <span class="brand-mark">YR</span>
+          <div>
+            <p class="eyebrow">Badminton Supply Terminal</p>
+            <h1>羽刃补给终端</h1>
+          </div>
+        </div>
+        <div class="status-strip" aria-label="当前补给状态">
+          <span>LIVE POOL</span>
+          <strong id="poolCount">0</strong>
+        </div>
+      </header>
+
+      <main class="terminal-grid">
+        <section class="control-panel" aria-label="抽取控制">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Supply Protocol</p>
+              <h2>补给协议</h2>
+            </div>
+            <span class="console-seal">YR-01</span>
+          </div>
+
+          <div class="protocol-card" aria-label="补给协议状态">
+            <div class="protocol-card__top">
+              <span>DROP MATRIX</span>
+              <strong>ONLINE</strong>
+            </div>
+            <div class="protocol-title">
+              <strong>EQUALIZED DROP</strong>
+              <span>全域同权</span>
+            </div>
+            <dl class="readout-grid">
+              <div>
+                <dt>POOL</dt>
+                <dd id="protocolPoolCount">49 LOCKED</dd>
+              </div>
+              <div>
+                <dt>WEIGHT</dt>
+                <dd>1 : 1</dd>
+              </div>
+              <div>
+                <dt>CORE</dt>
+                <dd>CRYPTO RNG</dd>
+              </div>
+              <div>
+                <dt>PITY</dt>
+                <dd>OFFLINE</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="control-row">
+            <div class="control-caption">
+              <span>SEQUENCE</span>
+              <strong id="sequenceState">SINGLE</strong>
+            </div>
+            <div class="segmented" id="modeToggle" aria-label="抽取模式">
+              <button class="is-active" type="button" data-mode="single">单次寻选</button>
+              <button type="button" data-mode="ten">十连补给</button>
+            </div>
+          </div>
+
+          <div class="control-row compact">
+            <button class="sound-toggle is-on" id="soundToggle" type="button" aria-pressed="true">
+              声效 ON
+            </button>
+            <button class="ghost-button" id="clearHistory" type="button">清空记录</button>
+          </div>
+
+          <button class="draw-button" id="drawButton" type="button">
+            <span class="draw-button__flare"></span>
+            <span class="draw-button__label">启动补给</span>
+          </button>
+
+          <div class="signal-stack" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="pool-preview" aria-label="全池奖池">
+            <div class="pool-preview__head">
+              <span id="poolModeLabel">ARSENAL INDEX</span>
+              <strong id="poolTierLabel">49 LOCKED</strong>
+            </div>
+            <div class="pool-list" id="poolList"></div>
+          </div>
+        </section>
+
+        <section class="summon-stage" id="summonStage" aria-live="polite">
+          <div class="stage-bloom" aria-hidden="true"></div>
+          <div class="stage-topline">
+            <span id="stageCode">FULL POOL</span>
+            <span id="stageState">READY</span>
+          </div>
+
+          <div class="scanner-rail" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="pack-scene" aria-hidden="true">
+            <div class="pack-aura"></div>
+            <div class="supply-pack" id="supplyPack">
+              <div class="pack-panel pack-panel--left"></div>
+              <div class="pack-panel pack-panel--right"></div>
+              <div class="zip-line"></div>
+              <div class="racket-sigil">
+                <span class="sigil-head"></span>
+                <span class="sigil-throat"></span>
+                <span class="sigil-shaft"></span>
+                <span class="sigil-grip"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal-board" id="revealBoard">
+            <div class="result-crest">
+              <div class="rarity-badge" id="rarityBadge">SSR</div>
+              <span class="result-serial" id="resultSerial">YR-0000</span>
+            </div>
+            <p class="result-kicker" id="resultKicker">锋线补给签发</p>
+            <h2 id="resultName">等待抽取</h2>
+            <div class="result-meta-row">
+              <span id="resultMeta">ALL-POOL STANDBY</span>
+              <strong id="resultSignal">EQUAL WEIGHT</strong>
+            </div>
+            <div class="result-actions">
+              <button class="ghost-button" id="copyResult" type="button">复制结果</button>
+              <button class="ghost-button" id="redrawButton" type="button">再来一次</button>
+            </div>
+          </div>
+
+          <div class="multi-results" id="multiResults" aria-label="十连结果"></div>
+        </section>
+
+        <aside class="history-panel" aria-label="抽取记录">
+          <div class="section-heading">
+            <p class="eyebrow">Record</p>
+            <h2>签发记录</h2>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
